@@ -1,0 +1,303 @@
+<!-- sldsValidatorIgnore -->
+<!-- expenseGrid.html -->
+<template>
+
+    <!-- The Modal -->
+    <template if:true={isTransactionTypeModalOpen}>
+        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container slds-modal_medium"> <!-- Here's the change -->
+                <!-- Modal Header -->
+                <header class="slds-modal__header">
+                    <h2 class="slds-modal__title">Transaction Type</h2>
+                </header>
+                <!-- Modal Body -->
+                <div class="slds-modal__content">
+                    <!-- Modal Body -->
+                    <!-- Add this inside your Modal Body, above the Search bar -->
+                    
+                    <!-- Add this search bar inside the Modal Body -->
+                    
+                    <!-- Space between datatables -->
+                    <lightning-card>
+                        <div class="slds-m-top_medium slds-grid slds-grid_vertical slds-align_absolute-center">
+                            <div class="slds-grid slds-grid_vertical slds-align_absolute-center">
+            
+            
+                                <lightning-radio-group name="transactionType" label="Transaction Type"
+                                    options={transactionTypeValues} value={transactionType} type="radio"
+                                    onchange={handleTransactionTypeChange} required="true" class="radio-group-1">
+                                </lightning-radio-group>
+            
+                                <template if:true={isOtherExpenseSelected}>
+                                    <lightning-radio-group name="otherExpenseType" label="How Many Team Members?"
+                                        options={otherExpenseTypeValues} value={otherExpenseType} type="radio"
+                                        onchange={handleOtherExpenseTypeChange} required="true" class="radio-group-2">
+                                    </lightning-radio-group>
+                                </template>
+                            </div>
+                        </div>
+                    </lightning-card>
+                </div>
+                <!-- Modal Footer -->
+                <footer class="slds-modal__footer">
+                    <lightning-button class="slds-m-right_medium" variant="neutral" label="Close"
+                        title="Close" onclick={closeModal}></lightning-button>
+                    <lightning-button variant="brand" label="New Expense"
+                        title="New Expense" onclick={handleNewExpense}></lightning-button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </template>
+
+    <!-- Transaction Type Card -->
+    <template if:true={isTransactionCardVisible}>
+        <lightning-card>
+            <div class="slds-m-top_medium slds-grid slds-grid_vertical slds-align_absolute-center">
+                <div class="slds-grid slds-grid_vertical slds-align_absolute-center">
+                   
+                    <!-- Credit Card Statement -->
+                <!--<template if:false={isOtherExpenseSelected}> -->
+                    <div class="slds-col">
+                        <div class="fixed-width-input">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Credit_Card_Statement__c" label="Credit Card Statement"
+                                onchange={handleCreditCardStatementChange} value={currentExpense.Credit_Card_Statement__c} required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+                    </div>
+                <!--</template> -->
+
+                    <lightning-radio-group name="recordType" label="Select a Record Type"
+                        options={recordTypeValues} value={recordType} type="radio"
+                        onchange={handleRecordTypeChange} required="true" class="radio-group-record-type">
+                    </lightning-radio-group>
+
+                </div>
+
+
+                <template if:false={isOtherExpenseSelected}>
+                    <div class="slds-m-top_medium">
+                        <lightning-button variant="brand" label="Next" title="Next"
+                            onclick={handleNextClick}></lightning-button>
+                    </div>
+                </template>
+            </div>
+        </lightning-card>
+    </template>
+
+
+    <!-- Expense Form Card -->
+    <template if:true={isExpenseCardVisible}>
+        <lightning-card>
+            <div class="slds-m-around_medium">
+                <template if:true={isExpenseCardVisible}>
+                    <div class="slds-grid slds-gutters">
+                        <!-- 1. Transaction Date -->
+                        <div class="slds-col">
+                            <lightning-record-edit-form object-api-name="Expense__c">
+                                <lightning-input-field field-name="Transaction_Date__c" label="Transaction Date"
+                                    onchange={handleDateChange} value={currentExpense.Transaction_Date__c} 
+                                    required>
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </div>
+                        <!-- 2. Payment Concept -->
+                        <div class="slds-col">
+                            <lightning-record-edit-form object-api-name="Expense__c">
+                                <lightning-input-field field-name="Name" label="Payment Concept"
+                                    onchange={handleNameChange} value={currentExpense.Name} required>
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </div>
+                        <!-- 3. Subcategory -->
+                        <template if:false={isLicenseOrEventVisible}> 
+                        <div class="slds-col">
+                            <lightning-record-edit-form object-api-name="Expense__c">
+                                <lightning-input-field field-name="Subcategory__c" label="Subcategory"
+                                    onchange={handleSubcategoryChange} value={currentExpense.Subcategory__c}
+                                    required>
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </div>
+                    </template>
+                        <!-- 4. Amount Spent -->
+                        <div class="slds-col">
+                            <lightning-record-edit-form object-api-name="Expense__c">
+                                <lightning-input-field field-name="Amount_Spent__c" label="Amount Spent"
+                                    onchange={handleAmountChange} value={currentExpense.Amount_Spent__c}
+                                    required>
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </div>
+                        <!-- 5. Associated Credit Card -->
+                        <div class="slds-col">
+                            <lightning-record-edit-form object-api-name="Expense__c">
+                                <lightning-input-field field-name="Associated_Credit_Card__c" label="Credit Card"
+                                    onchange={handleCreditCardChange} value={currentExpense.Associated_Credit_Card__c}
+                                    required>
+                                </lightning-input-field>
+                            </lightning-record-edit-form>
+                        </div>
+                        <!-- 7. Associated Team Member -->
+                        <template if:true={isTeamMemberVisible}>
+                            <div class="slds-col">
+                                <lightning-record-edit-form object-api-name="Expense__c">
+                                    <lightning-input-field field-name="Associated_Team_Member__c" label="Team member"
+                                        onchange={handleTeamMemberChange} value={currentExpense.Associated_Team_Member__c}
+                                         required>
+                                    </lightning-input-field>
+                                </lightning-record-edit-form>
+                            </div>
+                        </template>
+                        <!-- 8. License -->
+                        <template if:true={isLicenseVisible}>
+                            <div class="slds-col">
+                                <lightning-record-edit-form object-api-name="Expense__c">
+                                    <lightning-input-field field-name="License__c" label="License"
+                                        onchange={handleLicenseChange} value={currentExpense.License__c}
+                                        required>
+                                    </lightning-input-field>
+                                </lightning-record-edit-form>
+                            </div>
+                        </template>
+                        <!-- 9. Event -->
+                        <template if:true={isEventVisible}>
+                            <div class="slds-col">
+                                <lightning-record-edit-form object-api-name="Expense__c">
+                                    <lightning-input-field field-name="Course__c" label="Event"
+                                        onchange={handleEventChange} value={currentExpense.Course__c}
+                                        required>
+                                    </lightning-input-field>
+                                </lightning-record-edit-form>
+                            </div>
+                        </template>
+                        <!-- 10. Receipt Type -->
+                        <div class="slds-col">
+                            <lightning-combobox label="Receipt Type"
+                                value={currentExpense.Receipt_Type__c} options={receiptTypeValues}
+                                onchange={handleReceiptTypeChange}>
+                            </lightning-combobox>
+                        </div>
+                        <!-- Add/Edit Team Members Button -->
+                        <template if:true={isTeamMemberIconVisible}>
+                            <div class="slds-col slds-align_absolute-center">
+                                <lightning-button-icon icon-name="utility:groups" variant="border-filled" size="medium"
+                                    alternative-text="Multiple Team Members" onclick={openModal}
+                                    title="Multiple Team Members" 
+                                    class="multiple-team-members-button">
+                                </lightning-button-icon>
+                            </div>
+                        </template>
+
+
+                        <!-- The Modal -->
+                        <template if:true={isModalOpen}>
+                            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_large">
+                                <div class="slds-modal__container"> <!-- Here's the change -->
+                                    <!-- Modal Header -->
+                                    <header class="slds-modal__header">
+                                        <h2 class="slds-modal__title">Multiple Team Members Selection</h2>
+                                    </header>
+                                    <!-- Modal Body -->
+                                    <div class="slds-modal__content">
+                                        <!-- Modal Body -->
+                                        <!-- Add this inside your Modal Body, above the Search bar -->
+                                        <div class="slds-p-around_medium lgc-bg">
+                                            <lightning-input type="search" label="Search" onchange={handleSearch}
+                                                placeholder="Type a name"></lightning-input>
+                                        </div>
+                                        <!-- Add this search bar inside the Modal Body -->
+                                        <div class="slds-modal__content">
+                                            <lightning-datatable key-field="Id" data={teamMembers} columns={columns}
+                                                onrowselection={handleRowSelection}>
+                                            </lightning-datatable>
+                                        </div>
+                                        <!-- Space between datatables -->
+                                        <div style="margin-top: 20px;"></div>
+                                        <!-- Selected Team Members datatable with header -->
+                                        <template if:true={isSelectedRows}>
+                                        <lightning-card title="Selected Team Members">
+                                            <lightning-datatable key-field="id" data={selectedTeamMembers}
+                                                columns={columnsWithActions} onrowaction={handleRowAction}
+                                                hide-checkbox-column="false">
+                                            </lightning-datatable>
+                                        </lightning-card>
+                                    </template>
+                                    </div>
+                                    <!-- Modal Footer -->
+                                    <footer class="slds-modal__footer">
+                                        <lightning-button class="slds-m-right_medium" variant="neutral" label="Close"
+                                            title="Close" onclick={closeModal}></lightning-button>
+                                        <lightning-button variant="brand" label="Add Team Members"
+                                            title="Add Team Members" onclick={handleAddTeamMembers}></lightning-button>
+                                    </footer>
+                                </div>
+                            </section>
+                            <div class="slds-backdrop slds-backdrop_open"></div>
+                        </template>
+                    </div>
+                </template>
+            </div>
+            <!-- Buttons -->
+
+
+    
+            <template if:true={isExpenseCardVisible}>
+                <div class="slds-m-top_medium">
+                    <div class="slds-col slds-grid slds-grid_align-end">
+                        <lightning-button variant="brand" label="New Expense" title="New Expense" onclick={handleOpenNewExpense}
+                            class="end-button-1"></lightning-button>
+                    <div class="slds-col slds-grid slds-grid_align-end">
+                        <lightning-button variant="success" label="Add Expense" title="Add Expense" onclick={handleSaveExpenses}
+                            class="end-button-2"></lightning-button>
+                    </div>
+                    </div>
+                </div>
+            </template>
+        </lightning-card>
+    </template>
+   <!-- <lightning-datatable
+  key-field="Id"
+  data={expenses}
+  columns={expensesColumns}
+  hide-checkbox-column="true">
+</lightning-datatable>-->
+
+    <!-- Expenses Summary Card -->
+    
+    <template if:true={isExpenseCardVisible}>
+        <div class="slds-m-top_large slds-text-title_caps">
+            <lightning-card title="CREDIT CARD STATEMENT SUMMARY" variant="narrow">
+                <lightning-datatable
+                    key-field="Id"
+                    data={expenses}
+                    columns={selectedColumns}
+                    onrowaction={handleTransactionRowAction}
+                    hide-checkbox-column="true"
+                    class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_col-bordered">
+                ></lightning-datatable>
+                <!-- Display Total Amount Spent -->
+                <b><p class="slds-m-top_medium total-amount-spent">TOTAL AMOUNT SPENT: <span class="slds-text-color_success">${totalAmountSpentApproved}</span></p></b>
+                <!-- Display Total Amount in Pending -->
+
+                 <b><p class="slds-m-top_medium total-amount-spent-in-pending">TOTAL AMOUNT IN PENDING APPROVAL: <span class="slds-text-color_error">${totalAmountSpentPending}</span></p></b>
+
+
+                <!-- Buttons -->
+            <template if:true={isExpenseCardVisible}>
+                <div class="slds-m-top_medium">
+                    <div class="slds-col slds-grid slds-grid_align-end">
+                        <lightning-button variant="destructive" label="Send for Approval" title="Send for Approval"
+                            onclick={handleSendforApproval} class="end-button-2"></lightning-button>
+                    </div>
+                </div>
+            </template>
+            </lightning-card>
+        </div>
+    </template>
+
+
+    
+</template>

@@ -1,0 +1,145 @@
+<!-- expenseGrid.html -->
+<template>
+    <lightning-card>
+        <div class="slds-m-around_medium">
+            <template for:each={expenses} for:item="expense" for:index="index">
+
+                <div key={expense.id} class="slds-grid slds-gutters">
+
+                    <!-- 1. Transaction Date -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Transaction_Date__c" label="Transaction Date"
+                                onchange={handleDateChange} value={expense.Transaction_Date__c} data-index={index}
+                                required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 2. Payment Concept -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Name" label="Payment Concept" onchange={handleNameChange}
+                                value={expense.Name} data-index={index} required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 3. Amount Spent -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Amount_Spent__c" label="Amount Spent"
+                                onchange={handleAmountChange} value={expense.Amount_Spent__c} data-index={index}
+                                required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 4. Subcategory -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Subcategory__c" label="Subcategory"
+                                onchange={handleSubcategoryChange} value={expense.Subcategory__c} data-index={index}
+                                required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 5. Associated Credit Card -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Associated_Credit_Card__c" label="Credit Card"
+                                onchange={handleCreditCardChange} value={expense.Associated_Credit_Card__c}
+                                data-index={index} required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 6. Credit Card Statement -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Credit_Card_Statement__c" label="Credit Card Statement"
+                                onchange={handleCreditCardStatementChange} value={expense.Credit_Card_Statement__c}
+                                data-index={index} required>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 7. Receipt Type -->
+                    <div class="slds-col">
+                        <lightning-combobox name={expense.index} label="Receipt Type" value={expense.Receipt_Type__c}
+                            options={receiptTypeValues} onchange={handleReceiptTypeChange}>
+                        </lightning-combobox>
+                    </div>
+
+                    <!-- 8. Associated Team Member -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="Associated_Team_Member__c" label="Team member"
+                                onchange={handleTeamMemberChange} value={expense.Associated_Team_Member__c}
+                                data-index={index}>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- 9. License -->
+                    <div class="slds-col">
+                        <lightning-record-edit-form object-api-name="Expense__c">
+                            <lightning-input-field field-name="License__c" label="License"
+                                onchange={handleLicenseChange} value={expense.License__c} data-index={index}>
+                            </lightning-input-field>
+                        </lightning-record-edit-form>
+                    </div>
+
+                    <!-- Add/Edit Team Members Button -->
+                    <div class="slds-col slds-align_absolute-center">
+                        <lightning-button-icon icon-name="utility:groups" variant="border-filled" size="medium"
+                            alternative-text="Multiple Team Members" onclick={openModal} title="Multiple Team Members">
+                        </lightning-button-icon>
+                    </div>
+
+
+                    <!-- The Modal -->
+                    <template if:true={isModalOpen}>
+                        <section role="dialog" tabindex="-1" class="slds-modal slds-fade-in-open">
+                            <div class="slds-modal__container">
+                                <!-- Modal Header -->
+                                <header class="slds-modal__header">
+                                    <h2 class="slds-modal__title">Multiple Team Members Selection</h2>
+                                </header>
+                                <!-- Modal Body -->
+                                <div class="slds-modal__content">
+                                    <!-- Add this search bar inside the Modal Body -->
+<div class="slds-p-around_medium lgc-bg">
+    <lightning-input type="search" label="Search" onchange={handleSearch}></lightning-input>
+</div>
+
+                                    <!-- Modal Body -->
+                                    <div class="slds-modal__content">
+                                        <lightning-datatable key-field="Id" data={teamMembers} columns={columns}>
+                                        </lightning-datatable>
+                                    </div>
+
+                                </div>
+                                <!-- Modal Footer -->
+                                <footer class="slds-modal__footer">
+                                    <lightning-button variant="neutral" label="Close" title="Close"
+                                        onclick={closeModal}></lightning-button>
+                                </footer>
+                            </div>
+                        </section>
+                        <div class="slds-backdrop slds-backdrop_open"></div>
+                    </template>
+
+
+                </div>
+            </template>
+            <div class="slds-m-top_medium">
+                <lightning-button variant="brand" label="Add Row" title="Add Row" onclick={handleAddExpense}
+                    class="slds-var-m-left_x-small"></lightning-button>
+                <lightning-button variant="success" label="Save Expenses" title="Save Expenses"
+                    onclick={handleSaveExpenses} class="slds-var-m-left_x-small"></lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
