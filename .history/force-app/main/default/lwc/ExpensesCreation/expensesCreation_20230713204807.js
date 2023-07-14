@@ -791,8 +791,7 @@ const FIELD_LABELS = {
             requiredFields.push('Subcategory__c', 'selectedTeamMembers');
             break;
             case 'None':
-              requiredFields.push('Subcategory__c');
-              break;
+              
           default:
             console.log('Other Expense default');
 
@@ -858,7 +857,6 @@ async handleSaveExpenses() {
     await this.calculateExpensesTotal(); 
     
   } catch (error) {
-    console.log('Error in handleSaveExpenses:', error);
     let errorMessage = 'Unknown error'; // Default error message
     if (error.body && error.body.message) {
       // If error is in the expected format

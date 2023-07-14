@@ -858,7 +858,6 @@ async handleSaveExpenses() {
     await this.calculateExpensesTotal(); 
     
   } catch (error) {
-    console.log('Error in handleSaveExpenses:', error);
     let errorMessage = 'Unknown error'; // Default error message
     if (error.body && error.body.message) {
       // If error is in the expected format

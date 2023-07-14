@@ -753,87 +753,74 @@ handlePaymentMethodChange(event) {
 }
 
 
-validateForm() {
-
-  // Define a mapping from API names to labels
-const FIELD_LABELS = {
-  'Transaction_Date__c': 'Transaction Date',
-  'Name': 'Name',
-  'Subcategory__c': 'Category',
-  'Amount_Spent__c': 'Amount Spent',
-  'Associated_Credit_Card__c': 'Associated Credit Card',
-  'License__c': 'License',
-  'Course__c': 'Event',
-  'Associated_Team_Member__c': 'Associated Team Member',
-  'selectedTeamMembers': 'Multiple Team Member Selection'
-  // Add any other fields you need
-};
-
-  try {
-  let requiredFields = ['Transaction_Date__c', 'Name', 'Amount_Spent__c', 'Associated_Credit_Card__c'];
-
-  switch (this.transactionType) {
-      case '':
-          requiredFields.push('Subcategory__c');
-          break;
-      case 'License':
-          requiredFields.push('License__c');
-          break;
-      case 'Event':
-          requiredFields.push('Course__c');
-          break;
-      case 'Other Expense':
-        switch (this.otherExpenseType) {
-          case 'One':
-            requiredFields.push('Subcategory__c', 'Associated_Team_Member__c');
-            break;
-          case 'Multiple Team Members':
-            requiredFields.push('Subcategory__c', 'selectedTeamMembers');
-            break;
-            case 'None':
-              requiredFields.push('Subcategory__c');
-              break;
-          default:
-            console.log('Other Expense default');
-
-  }
-}
-
-let missingFields = [];
-for (let fieldName of requiredFields) {
-    if (!this.currentExpense[fieldName]) {
-        missingFields.push(FIELD_LABELS[fieldName] || fieldName);  // Use label if available, otherwise use API name
-    }
-}
-
-  if (missingFields.length > 0) {
-      this.dispatchEvent(
-          new ShowToastEvent({
-              title: 'Validation Error',
-              message: 'Missing required fields: ' + missingFields.join(', '),
-              variant: 'error'
-          })
-      );
-      return false;
-  }
-
-  return true;
-} catch (error) {
-  console.error('Error in validateForm:', error);
-  return false;
-}
-  
-}
-
 // Refactor the handleSaveExpenses method to use currentExpense instead of expenses
 async handleSaveExpenses() {
 
-  if (!this.validateForm()) {
-    console.log('validateForm called');
-    console.log('currentExpense:', this.currentExpense);
-    console.log('transactionType:', this.transactionType);
-    return;
-}
+  // Making sure that each transaction type has the required fields filled
+  switch (this.transactionType) {
+    case 'License':
+      if (!this.currentExpense.License__c) {
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: 'Error',
+            message: 'Please, select a license.',
+            variant: 'error'
+          })
+        );
+        return;
+      }
+      break;
+    case 'Event':
+      if (!this.currentExpense.Course__c) {
+        this.dispatchEvent(
+          new ShowToastEvent({
+            title: 'Error',
+            message: 'Please, select an event.',
+            variant: 'error'
+          })
+        );
+        return;
+      }
+      break;
+    case 'Other Expense':
+      switch (this.otherExpenseType) {
+        case 'One': 
+          if (!this.currentExpense.Associated_Team_Member__c) {
+            this.dispatchEvent(
+              new ShowToastEvent({
+                title: 'Error',
+                message: 'Please, select a team member.',
+                variant: 'error'
+              })
+            );
+            return;
+          }
+          break;
+        case 'Multiple Team Members':
+          if (!this.currentExpense.selectedTeamMembers) {
+            this.dispatchEvent(
+              new ShowToastEvent({
+                title: 'Error',
+                message: 'Please, select at least two team member.',
+                variant: 'error'
+              })
+            );
+            return;
+          }
+          break;
+          default:
+            this.dispatchEvent(
+              new ShowToastEvent({
+                title: 'Error',
+                message: 'Please, fill in all the required fields.',
+                variant: 'error'
+              })
+            );
+            return;
+            
+
+    }
+
 
   try {
     const expense = await saveExpenses({ expense: this.currentExpense });
@@ -858,7 +845,6 @@ async handleSaveExpenses() {
     await this.calculateExpensesTotal(); 
     
   } catch (error) {
-    console.log('Error in handleSaveExpenses:', error);
     let errorMessage = 'Unknown error'; // Default error message
     if (error.body && error.body.message) {
       // If error is in the expected format

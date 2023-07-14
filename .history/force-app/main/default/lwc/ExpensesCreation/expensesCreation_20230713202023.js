@@ -752,59 +752,37 @@ handlePaymentMethodChange(event) {
   this.currentExpense.Payment_Method__c = event.target.value;
 }
 
-
 validateForm() {
-
-  // Define a mapping from API names to labels
-const FIELD_LABELS = {
-  'Transaction_Date__c': 'Transaction Date',
-  'Name': 'Name',
-  'Subcategory__c': 'Category',
-  'Amount_Spent__c': 'Amount Spent',
-  'Associated_Credit_Card__c': 'Associated Credit Card',
-  'License__c': 'License',
-  'Course__c': 'Event',
-  'Associated_Team_Member__c': 'Associated Team Member',
-  'selectedTeamMembers': 'Multiple Team Member Selection'
-  // Add any other fields you need
-};
-
-  try {
-  let requiredFields = ['Transaction_Date__c', 'Name', 'Amount_Spent__c', 'Associated_Credit_Card__c'];
+  try{
+  let requiredFields = ['Transaction_Date__c', 'Name', 'Subcategory__c', 'Amount_Spent__c', 'Associated_Credit_Card__c'];
 
   switch (this.transactionType) {
-      case '':
-          requiredFields.push('Subcategory__c');
-          break;
       case 'License':
           requiredFields.push('License__c');
           break;
+      // Handle other transaction types
       case 'Event':
           requiredFields.push('Course__c');
           break;
       case 'Other Expense':
         switch (this.otherExpenseType) {
           case 'One':
-            requiredFields.push('Subcategory__c', 'Associated_Team_Member__c');
+            requiredFields.push('Associated_Team_Member__c');
             break;
           case 'Multiple Team Members':
-            requiredFields.push('Subcategory__c', 'selectedTeamMembers');
+            requiredFields.push('selectedTeamMembers');
             break;
-            case 'None':
-              requiredFields.push('Subcategory__c');
-              break;
           default:
             console.log('Other Expense default');
 
   }
-}
 
-let missingFields = [];
-for (let fieldName of requiredFields) {
-    if (!this.currentExpense[fieldName]) {
-        missingFields.push(FIELD_LABELS[fieldName] || fieldName);  // Use label if available, otherwise use API name
-    }
-}
+  let missingFields = [];
+  for (let fieldName of requiredFields) {
+      if (!this.currentExpense[fieldName]) {
+          missingFields.push(fieldName);
+      }
+  }
 
   if (missingFields.length > 0) {
       this.dispatchEvent(
@@ -822,7 +800,8 @@ for (let fieldName of requiredFields) {
   console.error('Error in validateForm:', error);
   return false;
 }
-  
+  }
+}
 }
 
 // Refactor the handleSaveExpenses method to use currentExpense instead of expenses
@@ -858,7 +837,6 @@ async handleSaveExpenses() {
     await this.calculateExpensesTotal(); 
     
   } catch (error) {
-    console.log('Error in handleSaveExpenses:', error);
     let errorMessage = 'Unknown error'; // Default error message
     if (error.body && error.body.message) {
       // If error is in the expected format

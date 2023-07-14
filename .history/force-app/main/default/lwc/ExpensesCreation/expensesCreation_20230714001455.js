@@ -83,7 +83,7 @@ export default class ExpenseCreation extends LightningElement {
   Transaction_Date__c: '',
   Amount_Spent__c: '',
   Associated_Credit_Card__c: '',
-  Receipt_Type__c: 'Digital - Recibo',
+  Receipt_Type__c: '',
   Credit_Card_Statement__c: '',
   Associated_Team_Member__c: '',
   Submit_for_Approval__c: false,

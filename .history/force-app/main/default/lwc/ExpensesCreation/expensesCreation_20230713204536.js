@@ -774,8 +774,7 @@ const FIELD_LABELS = {
 
   switch (this.transactionType) {
       case '':
-          requiredFields.push('Subcategory__c');
-          break;
+        
       case 'License':
           requiredFields.push('License__c');
           break;
@@ -790,9 +789,6 @@ const FIELD_LABELS = {
           case 'Multiple Team Members':
             requiredFields.push('Subcategory__c', 'selectedTeamMembers');
             break;
-            case 'None':
-              requiredFields.push('Subcategory__c');
-              break;
           default:
             console.log('Other Expense default');
 
@@ -858,7 +854,6 @@ async handleSaveExpenses() {
     await this.calculateExpensesTotal(); 
     
   } catch (error) {
-    console.log('Error in handleSaveExpenses:', error);
     let errorMessage = 'Unknown error'; // Default error message
     if (error.body && error.body.message) {
       // If error is in the expected format
