@@ -828,7 +828,7 @@ handleTransactionRowAction(event) {
     this.dispatchEvent(
       new ShowToastEvent({
         title: 'Error',
-        message: 'You cannot delete an expense that has been submitted for approval.',
+        message: 'You cannot edit or delete an approved expense',
         variant: 'error'
       })
     );
@@ -842,7 +842,7 @@ handleTransactionRowAction(event) {
     default:
       // Handle other actions if needed
   }
-}
+  
 }
 
 async deleteExpense(row) {

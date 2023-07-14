@@ -828,7 +828,7 @@ handleTransactionRowAction(event) {
     this.dispatchEvent(
       new ShowToastEvent({
         title: 'Error',
-        message: 'You cannot delete an expense that has been submitted for approval.',
+        message: 'You cannot delete an expense that has been submitted for approval',
         variant: 'error'
       })
     );

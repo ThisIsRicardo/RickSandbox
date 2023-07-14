@@ -20,8 +20,6 @@ import getEmployeeAdministrationSubcategoryId from '@salesforce/apex/ExpenseCont
 
 
 export default class ExpenseCreation extends LightningElement {
-
-  @track fieldsDisabled = false;
   @track TotalAmountSpent = 0;
   @track recruitmentAdministrationSubcategoryId;
   @track employeeAdministrationSubcategoryId;
@@ -56,9 +54,6 @@ export default class ExpenseCreation extends LightningElement {
   @track isMultipleTeamMembersAdded = false;
   @track value = '';
   //Filter initial data
-  isLicenseOrEventVisibleAndRecruitmentSelected = false;
-  isLicenseOrEventVisibleAndEmployeeSelected = false;
-  isLicenseOrEventVisibleAndAdministrationSelected = false;
   @track isRecruitmentBudgetSelected = false;
   @track isEmployeeBudgetSelected = false;
   @track isAdministrationBudgetSelected = false;
@@ -393,7 +388,6 @@ calculateAdministrationExpensesTotal() {
     return this.isLicenseVisible || this.isEventVisible;
 }
 
-
 getRowOptions(rowId) {
   // Find the row
   const row = this.rows.find(r => r.id === rowId);
@@ -439,13 +433,13 @@ handleRecordTypeChange(event) {
       this.isEmployeeBudgetSelected = false;
       this.isAdministrationBudgetSelected = false;
   } else if (this.recordType === 'Employee Experience and Development') {
-    this.isRecruitmentBudgetSelected = false;
-    this.isEmployeeBudgetSelected = true;
-    this.isAdministrationBudgetSelected = false;
-  } else{
-    this.isRecruitmentBudgetSelected = false;
+    this.isRecruitmentBudgetSelected = true;
     this.isEmployeeBudgetSelected = false;
-    this.isAdministrationBudgetSelected = true;
+    this.isAdministrationBudgetSelected = false;
+  } else if (this.recordType === 'Administration') {
+    this.isRecruitmentBudgetSelected = true;
+    this.isEmployeeBudgetSelected = false;
+    this.isAdministrationBudgetSelected = false;
   }
 }
 
@@ -642,7 +636,6 @@ handleOpenNewExpense() {
                 variant: 'success',
             }),
         );
-        this.fieldsDisabled = true;
     })
     .catch(error => {
         // handle error
@@ -824,17 +817,6 @@ handleTransactionRowAction(event) {
   const actionName = event.detail.action.name;
   const row = event.detail.row;
 
-  if (this.fieldsDisabled === true) {
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: 'Error',
-        message: 'You cannot delete an expense that has been submitted for approval.',
-        variant: 'error'
-      })
-    );
-    return;
-  }
-  else if (this.fieldsDisabled === false) {
   switch (actionName) {
     case 'delete':
       this.deleteExpense(row);
@@ -842,7 +824,6 @@ handleTransactionRowAction(event) {
     default:
       // Handle other actions if needed
   }
-}
 }
 
 async deleteExpense(row) {

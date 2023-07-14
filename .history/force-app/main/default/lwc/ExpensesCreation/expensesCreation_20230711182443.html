@@ -99,7 +99,7 @@
                         <div class="slds-col">
                             <lightning-record-edit-form object-api-name="Expense__c">
                                 <lightning-input-field field-name="Transaction_Date__c" label="Transaction Date"
-                                    onchange={handleDateChange} value={currentExpense.Transaction_Date__c} disabled={fieldsDisabled} required>
+                                    onchange={handleDateChange} value={currentExpense.Transaction_Date__c} required>
                                 </lightning-input-field>
                             </lightning-record-edit-form>
                         </div>
@@ -107,66 +107,26 @@
                         <div class="slds-col">
                             <lightning-record-edit-form object-api-name="Expense__c">
                                 <lightning-input-field field-name="Name" label="Payment Concept"
-                                    onchange={handleNameChange} value={currentExpense.Name} disabled={fieldsDisabled} required>
+                                    onchange={handleNameChange} value={currentExpense.Name} required>
                                 </lightning-input-field>
                             </lightning-record-edit-form>
                         </div>
                         <!-- 3. Subcategory -->
-                        <template if:true={isLicenseOrEventVisible2}>
+                        <template if:false={isLicenseOrEventVisible}>
                             <div class="slds-col">
                                 <lightning-record-edit-form object-api-name="Expense__c">
                                     <lightning-input-field field-name="Subcategory__c" label="Subcategory"
                                         onchange={handleSubcategoryChange} value={currentExpense.Subcategory__c}
-                                        disabled={fieldsDisabled} required>
+                                        required>
                                     </lightning-input-field>
                                 </lightning-record-edit-form>
                             </div>
                         </template>
-                        <!-- 3.1 Subcategory for Recruitment -->
-                        <template if:false={isLicenseOrEventVisible}>
-                        <template if:true={isRecruitmentBudgetSelected}>
-                            <div class="slds-col">
-                                <lightning-record-edit-form object-api-name="Expense__c">
-                                    <lightning-input-field field-name="Recruitment_Categories__c" label="Categories"
-                                        onchange={handleSubcategoryChange} value={currentExpense.Subcategory__c}
-                                        disabled={fieldsDisabled} required>
-                                    </lightning-input-field>
-                                </lightning-record-edit-form>
-                            </div>
-                        </template>
-                    </template>
-
-                        <!-- 3.2 Categories for Employee -->
-                        <template if:false={isLicenseOrEventVisible}>
-                        <template if:true={isEmployeeBudgetSelected}>
-                            <div class="slds-col">
-                                <lightning-record-edit-form object-api-name="Expense__c">
-                                    <lightning-input-field field-name="Employee_Categories__c" label="Categories"
-                                        onchange={handleSubcategoryChange} value={currentExpense.Subcategory__c}
-                                        disabled={fieldsDisabled} required>
-                                    </lightning-input-field>
-                                </lightning-record-edit-form>
-                            </div>
-                        </template>
-                    </template>
-                        <!-- 3.2 Categories for Administration -->
-                        <template if:false={isLicenseOrEventVisible}>
-                        <template if:true={isAdministrationBudgetSelected}>
-                            <div class="slds-col">
-                                <lightning-record-edit-form object-api-name="Expense__c">
-                                    <lightning-input-field field-name="Administration_Categories__c" label="Categories"
-                                        onchange={handleSubcategoryChange} value={currentExpense.Subcategory__c}
-                                        disabled={fieldsDisabled} required>
-                                    </lightning-input-field>
-                                </lightning-record-edit-form>
-                            </div>
-                        </template>
-                    </template>
                         <!-- 4. Amount Spent -->
                         <div class="slds-col">
                             <lightning-record-edit-form object-api-name="Expense__c">
                                 <lightning-input-field field-name="Amount_Spent__c" label="Amount Spent"
-                                    onchange={handleAmountChange} value={currentExpense.Amount_Spent__c} disabled={fieldsDisabled} required>
+                                    onchange={handleAmountChange} value={currentExpense.Amount_Spent__c} required>
                                 </lightning-input-field>
                             </lightning-record-edit-form>
                         </div>
@@ -175,7 +135,7 @@
                             <lightning-record-edit-form object-api-name="Expense__c">
                                 <lightning-input-field field-name="Associated_Credit_Card__c" label="Credit Card"
                                     onchange={handleCreditCardChange} value={currentExpense.Associated_Credit_Card__c}
-                                    disabled={fieldsDisabled} required>
+                                    required>
                                 </lightning-input-field>
                             </lightning-record-edit-form>
                         </div>
@@ -185,7 +145,7 @@
                                 <lightning-record-edit-form object-api-name="Expense__c">
                                     <lightning-input-field field-name="Associated_Team_Member__c" label="Team member"
                                         onchange={handleTeamMemberChange}
-                                        value={currentExpense.Associated_Team_Member__c} disabled={fieldsDisabled} required>
+                                        value={currentExpense.Associated_Team_Member__c} required>
                                     </lightning-input-field>
                                 </lightning-record-edit-form>
                             </div>
@@ -195,7 +155,7 @@
                             <div class="slds-col">
                                 <lightning-record-edit-form object-api-name="Expense__c">
                                     <lightning-input-field field-name="License__c" label="License"
-                                        onchange={handleLicenseChange} value={currentExpense.License__c} disabled={fieldsDisabled} required>
+                                        onchange={handleLicenseChange} value={currentExpense.License__c} required>
                                     </lightning-input-field>
                                 </lightning-record-edit-form>
                             </div>
@@ -205,7 +165,7 @@
                             <div class="slds-col">
                                 <lightning-record-edit-form object-api-name="Expense__c">
                                     <lightning-input-field field-name="Course__c" label="Event"
-                                        onchange={handleEventChange} value={currentExpense.Course__c} disabled={fieldsDisabled} required>
+                                        onchange={handleEventChange} value={currentExpense.Course__c} required>
                                     </lightning-input-field>
                                 </lightning-record-edit-form>
                             </div>
@@ -213,14 +173,14 @@
                         <!-- 10. Receipt Type -->
                         <div class="slds-col">
                             <lightning-combobox label="Receipt Type" value={currentExpense.Receipt_Type__c}
-                                options={receiptTypeValues} onchange={handleReceiptTypeChange} disabled={fieldsDisabled}>
+                                options={receiptTypeValues} onchange={handleReceiptTypeChange}>
                             </lightning-combobox>
                         </div>
                         <!-- Add/Edit Expense Comments -->
 
                         <div class="slds-col slds-align_absolute-center">
                             <lightning-button-icon icon-name="utility:comments" variant="border-filled" size="medium"
-                                alternative-text="Add Comments" onclick={openCommentsModal} title="Add Comments" disabled={fieldsDisabled}
+                                alternative-text="Add Comments" onclick={openCommentsModal} title="Add Comments"
                                 class="multiple-team-members-button">
                             </lightning-button-icon>
                         </div>
@@ -230,7 +190,7 @@
                             <div class="slds-col slds-align_absolute-center">
                                 <lightning-button-icon icon-name="utility:groups" variant="border-filled" size="medium"
                                     alternative-text="Multiple Team Members" onclick={openModal}
-                                    title="Multiple Team Members" disabled={fieldsDisabled} class="multiple-team-members-button">
+                                    title="Multiple Team Members" class="multiple-team-members-button">
                                 </lightning-button-icon>
                             </div>
                         </template>
@@ -284,38 +244,35 @@
                         </template>
 
 
-                        <!-- Comments Modal -->
-                        <template if:true={isCommentsModalOpen}>
-                            <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01"
-                                class="slds-modal slds-fade-in-open">
-                                <div class="slds-modal__container">
-                                    <!-- Modal Header -->
-                                    <header class="slds-modal__header">
-                                        <h2 class="slds-modal__title">Expense Comments</h2>
-                                    </header>
-                                    <!-- Modal Body -->
-                                    <div class="slds-modal__content">
-                                        <!-- Modal Body -->
-                                        <!-- Add this inside your Modal Body -->
-                                        <div class="slds-p-around_medium lgc-bg">
-                                            <lightning-record-edit-form object-api-name="Expense__c">
-                                                <lightning-input-field field-name="Comments__c"
-                                                    onchange={handleCommentsChange}
-                                                    value={currentExpense.Comments__c}></lightning-input-field>
-                                            </lightning-record-edit-form>
-                                        </div>
-                                    </div>
-                                    <!-- Modal Footer -->
-                                    <footer class="slds-modal__footer">
-                                        <lightning-button class="slds-m-right_medium" variant="neutral" label="Close"
-                                            title="Close" onclick={closeCommentsModal}></lightning-button>
-                                        <lightning-button variant="brand" label="Add Comments" title="Add Comments"
-                                            onclick={handleAddComments}></lightning-button>
-                                    </footer>
-                                </div>
-                            </section>
-                            <div class="slds-backdrop slds-backdrop_open"></div>
-                        </template>
+                       <!-- Comments Modal -->
+<template if:true={isCommentsModalOpen}>
+    <section role="dialog" tabindex="-1" aria-modal="true" aria-labelledby="modal-heading-01" class="slds-modal slds-fade-in-open slds-modal_small">
+        <div class="slds-modal__container">
+            <!-- Modal Header -->
+            <header class="slds-modal__header">
+                <h2 class="slds-modal__title">Expense Comments</h2>
+            </header>
+            <!-- Modal Body -->
+            <div class="slds-modal__content">
+                <!-- Modal Body -->
+                <!-- Add this inside your Modal Body -->
+                <div class="slds-p-around_medium lgc-bg">
+                    <lightning-record-edit-form object-api-name="Expense__c">
+                        <lightning-input-field field-name="Comments__c" onchange=></lightning-input-field>
+                    </lightning-record-edit-form>
+                </div>
+            </div>
+            <!-- Modal Footer -->
+            <footer class="slds-modal__footer">
+                <lightning-button class="slds-m-right_medium" variant="neutral" label="Close"
+                    title="Close" onclick={closeCommentsModal}></lightning-button>
+                <lightning-button variant="brand" label="Add Comments" title="Add Comments"
+                    onclick={handleAddComments}></lightning-button>
+            </footer>
+        </div>
+    </section>
+    <div class="slds-backdrop slds-backdrop_open"></div>
+</template>
 
 
                     </div>
@@ -324,24 +281,21 @@
             <!-- Buttons -->
 
 
-            
+
             <template if:true={isExpenseCardVisible}>
-                <template if:false={fieldsDisabled}>
                 <div class="slds-m-top_medium">
                     <div class="slds-col slds-grid slds-grid_align-end">
                         <lightning-button variant="brand" label="New Expense" title="New Expense"
-                            onclick={handleOpenNewExpense} disabled={fieldsDisabled} class="end-button-1"></lightning-button>
+                            onclick={handleOpenNewExpense} class="end-button-1"></lightning-button>
                         <div class="slds-col slds-grid slds-grid_align-end">
                             <lightning-button variant="success" label="Add Expense" title="Add Expense"
-                                onclick={handleSaveExpenses} disabled={fieldsDisabled} class="end-button-2"></lightning-button>
+                                onclick={handleSaveExpenses} class="end-button-2"></lightning-button>
                         </div>
                     </div>
                 </div>
             </template>
-            </template>
         </lightning-card>
     </template>
-    
     <!-- <lightning-datatable
   key-field="Id"
   data={expenses}
@@ -423,8 +377,8 @@
                                 class="blue-text">${totalAmountSpentApproved}</span></p>
                     </b>
                     <b>
-                        <p class="slds-m-top_medium total-amount-spent-in-pending">TOTAL AMOUNT IN PENDING APPROVAL: <span class="red-text"> ${totalAmountSpentPending}</span>
-                        </p>
+                        <p class="slds-m-top_medium total-amount-spent-in-pending">TOTAL AMOUNT IN PENDING APPROVAL:
+                            <span class="red-text">${totalAmountSpentPending}</span></p>
                     </b>
                     <b>
                         <p class="slds-m-top_medium total-amount-spent">TOTAL AMOUNT SPENT: <span
@@ -437,14 +391,12 @@
 
                 <!-- Buttons -->
                 <template if:true={isExpenseCardVisible}>
-                    <template if:false={fieldsDisabled}>
                     <div class="slds-m-top_medium">
                         <div class="slds-col slds-grid slds-grid_align-end">
                             <lightning-button variant="destructive" label="Send for Approval" title="Send for Approval"
                                 onclick={handleSendforApproval} class="end-button-2"></lightning-button>
                         </div>
                     </div>
-                </template>
                 </template>
             </lightning-card>
         </div>

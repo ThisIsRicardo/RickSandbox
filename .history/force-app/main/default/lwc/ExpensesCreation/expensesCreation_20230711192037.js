@@ -20,8 +20,6 @@ import getEmployeeAdministrationSubcategoryId from '@salesforce/apex/ExpenseCont
 
 
 export default class ExpenseCreation extends LightningElement {
-
-  @track fieldsDisabled = false;
   @track TotalAmountSpent = 0;
   @track recruitmentAdministrationSubcategoryId;
   @track employeeAdministrationSubcategoryId;
@@ -389,8 +387,23 @@ calculateAdministrationExpensesTotal() {
 
 
   get isLicenseOrEventVisible() {
-    // I want t
-    return this.isLicenseVisible || this.isEventVisible;
+    
+    if (this.receiptType === 'License' || this.receiptType === 'Event') {
+      this.isLicenseOrEventVisibleAndRecruitmentSelected = false;
+      this.isLicenseOrEventVisibleAndEmployeeSelected = false;
+      this.isLicenseOrEventVisibleAndAdministrationSelected = false;
+} else if (this.receiptType !== 'License' || this.receiptType !== 'Event' && this.recordType === 'Recruitment, Trainees and Marketing') {
+  this.isLicenseOrEventVisibleAndRecruitmentSelected = true;
+  this.isLicenseOrEventVisibleAndEmployeeSelected = false;
+  this.isLicenseOrEventVisibleAndAdministrationSelected = false;
+} else if (this.receiptType !== 'License' || this.receiptType !== 'Event' && this.recordType === 'Employee Experience and Development') {
+  this.isLicenseOrEventVisibleAndRecruitmentSelected = false;
+  this.isLicenseOrEventVisibleAndEmployeeSelected = true;
+  this.isLicenseOrEventVisibleAndAdministrationSelected = false;
+} else if (this.receiptType !== 'License' || this.receiptType !== 'Event' && this.recordType === 'Administration') {
+  this.isLicenseOrEventVisibleAndRecruitmentSelected = false;
+  this.isLicenseOrEventVisibleAndEmployeeSelected = false;
+  this.isLicenseOrEventVisibleAndAdministrationSelected = true;
 }
 
 
@@ -642,7 +655,6 @@ handleOpenNewExpense() {
                 variant: 'success',
             }),
         );
-        this.fieldsDisabled = true;
     })
     .catch(error => {
         // handle error
@@ -824,17 +836,6 @@ handleTransactionRowAction(event) {
   const actionName = event.detail.action.name;
   const row = event.detail.row;
 
-  if (this.fieldsDisabled === true) {
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: 'Error',
-        message: 'You cannot delete an expense that has been submitted for approval.',
-        variant: 'error'
-      })
-    );
-    return;
-  }
-  else if (this.fieldsDisabled === false) {
   switch (actionName) {
     case 'delete':
       this.deleteExpense(row);
@@ -842,7 +843,6 @@ handleTransactionRowAction(event) {
     default:
       // Handle other actions if needed
   }
-}
 }
 
 async deleteExpense(row) {

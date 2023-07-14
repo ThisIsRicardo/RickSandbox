@@ -114,13 +114,16 @@ export default class ExpenseCreation extends LightningElement {
     { label: 'Category', fieldName: 'subcategoryName', fixedWidth: 300 },
     { label: 'Budget', fieldName: 'budgetCategory'},
     {
+      if (this.isTransactionCardVisible) {
       type: 'action',
       typeAttributes: {
         rowActions: [
           { name: 'delete', label: 'Delete', iconName: 'utility:delete' }
         ]
+        
       }
     }
+    
   ];
   
 
@@ -824,17 +827,6 @@ handleTransactionRowAction(event) {
   const actionName = event.detail.action.name;
   const row = event.detail.row;
 
-  if (this.fieldsDisabled === true) {
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: 'Error',
-        message: 'You cannot delete an expense that has been submitted for approval.',
-        variant: 'error'
-      })
-    );
-    return;
-  }
-  else if (this.fieldsDisabled === false) {
   switch (actionName) {
     case 'delete':
       this.deleteExpense(row);
@@ -842,7 +834,6 @@ handleTransactionRowAction(event) {
     default:
       // Handle other actions if needed
   }
-}
 }
 
 async deleteExpense(row) {

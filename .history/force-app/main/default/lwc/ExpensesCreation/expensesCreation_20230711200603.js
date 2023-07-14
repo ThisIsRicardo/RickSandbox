@@ -642,7 +642,7 @@ handleOpenNewExpense() {
                 variant: 'success',
             }),
         );
-        this.fieldsDisabled = true;
+        this.fiel
     })
     .catch(error => {
         // handle error
@@ -824,17 +824,6 @@ handleTransactionRowAction(event) {
   const actionName = event.detail.action.name;
   const row = event.detail.row;
 
-  if (this.fieldsDisabled === true) {
-    this.dispatchEvent(
-      new ShowToastEvent({
-        title: 'Error',
-        message: 'You cannot delete an expense that has been submitted for approval.',
-        variant: 'error'
-      })
-    );
-    return;
-  }
-  else if (this.fieldsDisabled === false) {
   switch (actionName) {
     case 'delete':
       this.deleteExpense(row);
@@ -842,7 +831,6 @@ handleTransactionRowAction(event) {
     default:
       // Handle other actions if needed
   }
-}
 }
 
 async deleteExpense(row) {
